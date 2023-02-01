@@ -2,7 +2,7 @@ import path from '@/core/path';
 import { EMediaPlayStatus } from '@/types';
 import { TMediaPlayerRef } from '@/utils';
 import { getCurrent } from '@tauri-apps/api/window';
-import React, { useEffect, useImperativeHandle, useRef } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import styles from './index.module.less';
 
 interface IVideoPlayerProps {
@@ -64,6 +64,57 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 	}));
 
 	const contentRef = useRef<HTMLDivElement>(null);
+	const [enterFullscreen, exitFullscreen] = useMemo(
+		() => [
+			() => {
+				const content = contentRef.current;
+				if (!content) return;
+
+				return content.requestFullscreen();
+			},
+			() => {
+				return document.exitFullscreen();
+			},
+		],
+		[]
+	);
+	const changeFullscreenStatus = useCallback(() => {
+		const isFullScreen = document.fullscreenElement !== null;
+		if (isFullScreen) {
+			exitFullscreen();
+		} else {
+			enterFullscreen();
+		}
+	}, []);
+
+	// 绑定全屏控制手势
+	useEffect(() => {
+		const bindFullscreenController = (ev: KeyboardEvent) => {
+			switch (ev.code) {
+				case 'KeyF':
+					return changeFullscreenStatus();
+			}
+		};
+		document.addEventListener('keydown', bindFullscreenController);
+
+		return () => {
+			document.removeEventListener('keydown', bindFullscreenController);
+		};
+	}, []);
+
+	useEffect(() => {
+		// 由于 WebView 在接到 Escape 命令时会拦截键盘事件并自动退出全屏，因此只能使用 fullscreenchange 作为同步
+		const onFullscreenChange = () => {
+			const currentWindow = getCurrent();
+			const isFullscreen = document.fullscreenElement !== null;
+			currentWindow.setFullscreen(isFullscreen);
+		};
+		document.addEventListener('fullscreenchange', onFullscreenChange);
+
+		return () => {
+			document.removeEventListener('fullscreenchange', onFullscreenChange);
+		};
+	}, []);
 
 	return (
 		<div className={styles.videoContent} ref={contentRef}>
@@ -72,20 +123,7 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 				ref={videoRef}
 				autoPlay
 				onClick={onPlayStatusChange}
-				onDoubleClick={() => {
-					const content = contentRef.current;
-					if (!content) return;
-
-					const isFullScreen = document.fullscreenElement !== null;
-					const currentWindow = getCurrent();
-					if (isFullScreen) {
-						document.exitFullscreen();
-						currentWindow.setFullscreen(false);
-					} else {
-						content.requestFullscreen();
-						currentWindow.setFullscreen(true);
-					}
-				}}
+				onDoubleClick={changeFullscreenStatus}
 				onWheel={(ev) => {
 					const step = Number((ev.deltaY / 62.5).toFixed(0));
 					onVolumeChange(mediaVolume * 100 - step);

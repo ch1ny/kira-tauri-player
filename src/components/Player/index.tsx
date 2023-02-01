@@ -51,6 +51,7 @@ interface IPlayingMediaInfo {
 
 const DefaultVoice = Number(localStorage.getItem('voice') || '100');
 
+// 绑定播放器控制手势
 const useBindGesture = (callbacks: {
 	adjustVolume(active: boolean): void;
 	adjustProgress(active: boolean): void;
@@ -59,7 +60,7 @@ const useBindGesture = (callbacks: {
 	const { adjustVolume, adjustProgress, changeMediaPlayStatus } = callbacks;
 
 	useEffect(() => {
-		document.onkeydown = (ev) => {
+		const bindGesture = (ev: KeyboardEvent) => {
 			switch (ev.code) {
 				// 调节音量
 				case 'ArrowUp':
@@ -76,9 +77,10 @@ const useBindGesture = (callbacks: {
 					return changeMediaPlayStatus();
 			}
 		};
+		document.addEventListener('keydown', bindGesture);
 
 		return () => {
-			document.onkeydown = null;
+			document.removeEventListener('keydown', bindGesture);
 		};
 	}, []);
 };
