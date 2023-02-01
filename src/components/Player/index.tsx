@@ -49,7 +49,7 @@ interface IPlayingMediaInfo {
 	mediaPlayStatus: EMediaPlayStatus;
 }
 
-const DefaultVoice = Number(localStorage.getItem('voice') || '100');
+const DefaultVoice = Number(localStorage.getItem('voice') || '30');
 
 // 绑定播放器控制手势
 const useBindGesture = (callbacks: {
