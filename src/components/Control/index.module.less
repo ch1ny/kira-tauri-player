@@ -39,4 +39,16 @@
       margin-inline: .5em;
     }
   }
+
+  :global {
+    .ant-slider-handle{
+      &::before {
+        display: none;
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+  }
 }

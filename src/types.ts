@@ -14,3 +14,8 @@ export interface IAntdSliderRef {
 	focus: () => void;
 	blur: () => void;
 }
+
+export enum EMediaPlayStatus {
+	PAUSED,
+	PLAYING,
+}

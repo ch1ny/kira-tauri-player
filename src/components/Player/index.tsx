@@ -1,4 +1,4 @@
-import { EMediaType } from '@/types';
+import { EMediaPlayStatus, EMediaType } from '@/types';
 import { defaultMediaPlayerRef, getMediaType, TMediaPlayerRef } from '@/utils';
 import { getMatches } from '@tauri-apps/api/cli';
 import { open } from '@tauri-apps/api/dialog';
@@ -46,6 +46,7 @@ interface IPlayingMediaInfo {
 	mediaVoice: number;
 	mediaDuration: number;
 	mediaProgress: number;
+	mediaPlayStatus: EMediaPlayStatus;
 }
 
 const DefaultVoice = Number(localStorage.getItem('voice') || '100');
@@ -74,10 +75,17 @@ export const Player = () => {
 		mediaVoice: DefaultVoice,
 		mediaDuration: 0,
 		mediaProgress: 0,
+		mediaPlayStatus: EMediaPlayStatus.PAUSED,
 	});
 	useEffect(() => {
 		localStorage.setItem('voice', `${playingMediaInfo.mediaVoice}`);
 	}, [playingMediaInfo.mediaVoice]);
+
+	useEffect(() => {
+		setPlayingMediaInfo({
+			mediaPlayStatus: !mediaPath ? EMediaPlayStatus.PAUSED : EMediaPlayStatus.PLAYING,
+		});
+	}, [mediaPath]);
 
 	return (
 		<div className={styles.playerContent}>
@@ -89,6 +97,7 @@ export const Player = () => {
 								<VideoPlayer
 									mediaPath={mediaPath}
 									mediaVoice={playingMediaInfo.mediaVoice / 100}
+									mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
 									ref={playerRef}
 									onProgressChange={(progress) => {
 										setPlayingMediaInfo({
@@ -98,6 +107,11 @@ export const Player = () => {
 									onVideoDurationChange={(duration) => {
 										setPlayingMediaInfo({
 											mediaDuration: duration,
+										});
+									}}
+									onPlayEnded={() => {
+										setPlayingMediaInfo({
+											mediaPlayStatus: EMediaPlayStatus.PAUSED,
 										});
 									}}
 								/>
@@ -116,7 +130,19 @@ export const Player = () => {
 						});
 					}}
 					progress={playingMediaInfo.mediaProgress}
+					onProgressChange={(progress) => {
+						playerRef.current.jumpTo(progress);
+						setPlayingMediaInfo({
+							mediaPlayStatus: EMediaPlayStatus.PLAYING,
+						});
+					}}
 					mediaDuration={playingMediaInfo.mediaDuration}
+					mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
+					onPlayStatusChange={() => {
+						setPlayingMediaInfo(({ mediaPlayStatus }) => ({
+							mediaPlayStatus: 1 - mediaPlayStatus,
+						}));
+					}}
 				/>
 			</div>
 		</div>

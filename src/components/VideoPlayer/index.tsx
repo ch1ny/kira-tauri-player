@@ -1,4 +1,5 @@
 import path from '@/core/path';
+import { EMediaPlayStatus } from '@/types';
 import { TMediaPlayerRef } from '@/utils';
 import { getCurrent } from '@tauri-apps/api/window';
 import React, { useEffect, useImperativeHandle, useRef } from 'react';
@@ -7,12 +8,21 @@ import styles from './index.module.less';
 interface IVideoPlayerProps {
 	mediaPath: string;
 	mediaVoice: number;
+	mediaPlayStatus: EMediaPlayStatus;
 	onVideoDurationChange: (duration: number) => void;
 	onProgressChange: (progress: number) => void;
+	onPlayEnded: () => void;
 }
 
 export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>((props, ref) => {
-	const { mediaPath, mediaVoice, onProgressChange, onVideoDurationChange } = props;
+	const {
+		mediaPath,
+		mediaVoice,
+		mediaPlayStatus,
+		onProgressChange,
+		onVideoDurationChange,
+		onPlayEnded,
+	} = props;
 
 	const videoRef = useRef<HTMLVideoElement>(null);
 	useEffect(() => {
@@ -21,6 +31,12 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 
 		dom.volume = mediaVoice;
 	}, [mediaVoice]);
+	useEffect(() => {
+		const dom = videoRef.current;
+		if (!dom) return;
+
+		mediaPlayStatus === EMediaPlayStatus.PAUSED ? dom.pause() : dom.play();
+	}, [mediaPlayStatus]);
 
 	useImperativeHandle(ref, () => ({
 		getDuration: () => {
@@ -34,6 +50,19 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 			if (!dom) return;
 
 			dom.currentTime = destTime;
+		},
+		play: () => {
+			const dom = videoRef.current;
+			if (!dom) return;
+
+			dom.play();
+		},
+
+		pause: () => {
+			const dom = videoRef.current;
+			if (!dom) return;
+
+			dom.pause();
 		},
 	}));
 
@@ -61,6 +90,7 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 				onTimeUpdate={(ev) => {
 					onProgressChange((ev.target as HTMLVideoElement).currentTime);
 				}}
+				onEnded={onPlayEnded}
 			/>
 		</div>
 	);
