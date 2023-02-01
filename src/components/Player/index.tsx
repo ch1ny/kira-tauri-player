@@ -51,6 +51,38 @@ interface IPlayingMediaInfo {
 
 const DefaultVoice = Number(localStorage.getItem('voice') || '100');
 
+const useBindGesture = (callbacks: {
+	adjustVolume(active: boolean): void;
+	adjustProgress(active: boolean): void;
+	changeMediaPlayStatus(): void;
+}) => {
+	const { adjustVolume, adjustProgress, changeMediaPlayStatus } = callbacks;
+
+	useEffect(() => {
+		document.onkeydown = (ev) => {
+			switch (ev.code) {
+				// 调节音量
+				case 'ArrowUp':
+					return adjustVolume(true);
+				case 'ArrowDown':
+					return adjustVolume(false);
+				// 调整播放进度
+				case 'ArrowRight':
+					return adjustProgress(true);
+				case 'ArrowLeft':
+					return adjustProgress(false);
+				// 切换播放状态
+				case 'Space':
+					return changeMediaPlayStatus();
+			}
+		};
+
+		return () => {
+			document.onkeydown = null;
+		};
+	}, []);
+};
+
 export const Player = () => {
 	const [mediaPath, setMediaPath] = useState('');
 	// 初始化查看应用是否通过 args 传入播放的多媒体文件
@@ -91,6 +123,22 @@ export const Player = () => {
 			mediaPlayStatus: !mediaPath ? EMediaPlayStatus.PAUSED : EMediaPlayStatus.PLAYING,
 		});
 	}, [mediaPath]);
+
+	useBindGesture({
+		adjustVolume: useCallback((active: boolean) => {
+			setPlayingMediaInfo(({ mediaVolume }) => ({
+				mediaVolume: active ? Math.min(100, mediaVolume + 10) : Math.max(0, mediaVolume - 10),
+			}));
+		}, []),
+		adjustProgress: useCallback((active: boolean) => {
+			const currentTime = playerRef.current.getCurrentTime(),
+				duration = playerRef.current.getDuration();
+			playerRef.current.jumpTo(
+				active ? Math.min(duration, currentTime + 3) : Math.max(0, currentTime - 3)
+			);
+		}, []),
+		changeMediaPlayStatus,
+	});
 
 	return (
 		<div className={styles.playerContent}>

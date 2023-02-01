@@ -43,6 +43,12 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 	}, [mediaPlayStatus]);
 
 	useImperativeHandle(ref, () => ({
+		getCurrentTime: () => {
+			const dom = videoRef.current;
+			if (!dom) return 0;
+
+			return dom.currentTime;
+		},
 		getDuration: () => {
 			const dom = videoRef.current;
 			if (!dom) return 0;
