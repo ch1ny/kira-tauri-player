@@ -1,8 +1,10 @@
 .control {
   width: 100%;
-  height: 3rem;
+  height: 5rem;
   display: flex;
   align-items: center;
+  color: #f0f8ff;
+  background-color: #3d434d;
 
   .mediaInfo {
     width: 20%;
@@ -41,13 +43,36 @@
   }
 
   :global {
-    .ant-slider-handle{
-      &::before {
-        display: none;
+    .ant-slider {
+      &-handle{
+        &::before {
+          display: none;
+        }
+  
+        &::after {
+          display: none;
+        }
+      }
+  
+      &-rail {
+        background-color: rgba(255, 255, 255, .4);
+      }
+  
+      &-track {
+        background-color: #4096ff;
+        transition: all .2s ease;
       }
 
-      &::after {
-        display: none;
+      &:hover {
+  
+        .ant-slider-rail {
+          background-color: rgba(255, 255, 255, .5);
+        }
+    
+        .ant-slider-track {
+          background-color: #69b1ff;
+          transform: scaleY(1.5);
+        }
       }
     }
   }

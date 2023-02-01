@@ -7,21 +7,25 @@ import styles from './index.module.less';
 
 interface IVideoPlayerProps {
 	mediaPath: string;
-	mediaVoice: number;
+	mediaVolume: number;
 	mediaPlayStatus: EMediaPlayStatus;
+	onVolumeChange: (volume: number) => void;
 	onVideoDurationChange: (duration: number) => void;
 	onProgressChange: (progress: number) => void;
 	onPlayEnded: () => void;
+	onPlayStatusChange: () => void;
 }
 
 export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>((props, ref) => {
 	const {
 		mediaPath,
-		mediaVoice,
+		mediaVolume,
 		mediaPlayStatus,
+		onVolumeChange,
 		onProgressChange,
 		onVideoDurationChange,
 		onPlayEnded,
+		onPlayStatusChange,
 	} = props;
 
 	const videoRef = useRef<HTMLVideoElement>(null);
@@ -29,8 +33,8 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 		const dom = videoRef.current;
 		if (!dom) return;
 
-		dom.volume = mediaVoice;
-	}, [mediaVoice]);
+		dom.volume = mediaVolume;
+	}, [mediaVolume]);
 	useEffect(() => {
 		const dom = videoRef.current;
 		if (!dom) return;
@@ -51,27 +55,35 @@ export const VideoPlayer = React.forwardRef<TMediaPlayerRef, IVideoPlayerProps>(
 
 			dom.currentTime = destTime;
 		},
-		play: () => {
-			const dom = videoRef.current;
-			if (!dom) return;
-
-			dom.play();
-		},
-
-		pause: () => {
-			const dom = videoRef.current;
-			if (!dom) return;
-
-			dom.pause();
-		},
 	}));
 
+	const contentRef = useRef<HTMLDivElement>(null);
+
 	return (
-		<div className={styles.videoContent}>
+		<div className={styles.videoContent} ref={contentRef}>
 			<video
 				src={mediaPath}
 				ref={videoRef}
 				autoPlay
+				onClick={onPlayStatusChange}
+				onDoubleClick={() => {
+					const content = contentRef.current;
+					if (!content) return;
+
+					const isFullScreen = document.fullscreenElement !== null;
+					const currentWindow = getCurrent();
+					if (isFullScreen) {
+						document.exitFullscreen();
+						currentWindow.setFullscreen(false);
+					} else {
+						content.requestFullscreen();
+						currentWindow.setFullscreen(true);
+					}
+				}}
+				onWheel={(ev) => {
+					const step = Number((ev.deltaY / 62.5).toFixed(0));
+					onVolumeChange(mediaVolume * 100 - step);
+				}}
 				onContextMenu={(ev) => {
 					ev.preventDefault();
 				}}

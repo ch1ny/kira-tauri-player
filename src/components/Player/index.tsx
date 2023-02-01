@@ -43,7 +43,7 @@ const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
 
 interface IPlayingMediaInfo {
 	mediaPath: string;
-	mediaVoice: number;
+	mediaVolume: number;
 	mediaDuration: number;
 	mediaProgress: number;
 	mediaPlayStatus: EMediaPlayStatus;
@@ -72,14 +72,19 @@ export const Player = () => {
 
 	const [playingMediaInfo, setPlayingMediaInfo] = useSetState<IPlayingMediaInfo>({
 		mediaPath,
-		mediaVoice: DefaultVoice,
+		mediaVolume: DefaultVoice,
 		mediaDuration: 0,
 		mediaProgress: 0,
 		mediaPlayStatus: EMediaPlayStatus.PAUSED,
 	});
 	useEffect(() => {
-		localStorage.setItem('voice', `${playingMediaInfo.mediaVoice}`);
-	}, [playingMediaInfo.mediaVoice]);
+		localStorage.setItem('voice', `${playingMediaInfo.mediaVolume}`);
+	}, [playingMediaInfo.mediaVolume]);
+	const changeMediaPlayStatus = useCallback(() => {
+		setPlayingMediaInfo(({ mediaPlayStatus }) => ({
+			mediaPlayStatus: 1 - mediaPlayStatus,
+		}));
+	}, []);
 
 	useEffect(() => {
 		setPlayingMediaInfo({
@@ -96,9 +101,14 @@ export const Player = () => {
 							return (
 								<VideoPlayer
 									mediaPath={mediaPath}
-									mediaVoice={playingMediaInfo.mediaVoice / 100}
+									mediaVolume={playingMediaInfo.mediaVolume / 100}
 									mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
 									ref={playerRef}
+									onVolumeChange={(volume) => {
+										setPlayingMediaInfo({
+											mediaVolume: Math.min(100, Math.max(0, volume)),
+										});
+									}}
 									onProgressChange={(progress) => {
 										setPlayingMediaInfo({
 											mediaProgress: progress,
@@ -114,6 +124,7 @@ export const Player = () => {
 											mediaPlayStatus: EMediaPlayStatus.PAUSED,
 										});
 									}}
+									onPlayStatusChange={changeMediaPlayStatus}
 								/>
 							);
 						default:
@@ -123,10 +134,10 @@ export const Player = () => {
 			</div>
 			<div className={styles.controller}>
 				<Control
-					voice={playingMediaInfo.mediaVoice}
-					onVoiceChange={(voice) => {
+					volume={playingMediaInfo.mediaVolume}
+					onVolumeChange={(volume) => {
 						setPlayingMediaInfo({
-							mediaVoice: voice,
+							mediaVolume: volume,
 						});
 					}}
 					progress={playingMediaInfo.mediaProgress}
@@ -138,11 +149,7 @@ export const Player = () => {
 					}}
 					mediaDuration={playingMediaInfo.mediaDuration}
 					mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
-					onPlayStatusChange={() => {
-						setPlayingMediaInfo(({ mediaPlayStatus }) => ({
-							mediaPlayStatus: 1 - mediaPlayStatus,
-						}));
-					}}
+					onPlayStatusChange={changeMediaPlayStatus}
 				/>
 			</div>
 		</div>

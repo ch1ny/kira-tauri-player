@@ -11,8 +11,8 @@ import { Button, Slider } from 'antd';
 import styles from './index.module.less';
 
 interface IControlProps {
-	voice: number;
-	onVoiceChange: (voice: number) => void;
+	volume: number;
+	onVolumeChange: (volume: number) => void;
 	progress: number;
 	onProgressChange: (progress: number) => void;
 	mediaDuration: number;
@@ -28,8 +28,8 @@ const transSecondsToMinutes = (time: number) => {
 
 export const Control: React.FC<IControlProps> = (props) => {
 	const {
-		voice,
-		onVoiceChange,
+		volume,
+		onVolumeChange,
 		progress,
 		onProgressChange,
 		mediaDuration,
@@ -83,9 +83,9 @@ export const Control: React.FC<IControlProps> = (props) => {
 						min={0}
 						max={100}
 						step={1}
-						value={voice}
+						value={volume}
 						tooltip={{ formatter: (value) => `${value}%` }}
-						onChange={onVoiceChange}
+						onChange={onVolumeChange}
 					/>
 				</div>
 				<div className={styles.playController}>
