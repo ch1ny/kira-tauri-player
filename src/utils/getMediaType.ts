@@ -11,6 +11,8 @@ export const getMediaType = (mediaPath: string) => {
 	switch (mediaExt.toLowerCase()) {
 		case 'mp4':
 		case 'webm':
+		case 'mkv':
+		case 'mov':
 			return EMediaType.VIDEO;
 		case 'mp3':
 		case 'wav':
