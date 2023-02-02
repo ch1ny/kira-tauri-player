@@ -62,11 +62,7 @@
 			"windows": {
 				"certificateThumbprint": null,
 				"digestAlgorithm": "sha256",
-				"timestampUrl": "",
-				"wix": {
-					"template": "./kira_player.wxs",
-					"language": "zh-CN"
-				}
+				"timestampUrl": ""
 			}
 		},
 		"cli": {

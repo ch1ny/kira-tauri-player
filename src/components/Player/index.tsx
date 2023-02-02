@@ -22,7 +22,7 @@ const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
 			filters: [
 				{
 					name: 'Video',
-					extensions: ['mp4', 'webm', 'mkv', 'mov', 'flv', 'm3u8', 'm3u', 'mpd'],
+					extensions: ['mp4', 'webm', 'mkv', 'mov', 'flv', 'm3u'],
 				},
 			],
 		});
