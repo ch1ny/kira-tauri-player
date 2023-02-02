@@ -22,7 +22,7 @@ const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
 			filters: [
 				{
 					name: 'Video',
-					extensions: ['mp4', 'webm', 'mkv', 'mov'],
+					extensions: ['mp4', 'webm', 'mkv', 'mov', 'flv', 'm3u8', 'm3u', 'mpd'],
 				},
 			],
 		});
@@ -135,9 +135,13 @@ export const Player = () => {
 		adjustProgress: useCallback((active: boolean) => {
 			const currentTime = playerRef.current.getCurrentTime(),
 				duration = playerRef.current.getDuration();
-			playerRef.current.jumpTo(
-				active ? Math.min(duration, currentTime + 3) : Math.max(0, currentTime - 3)
-			);
+
+			const destTime = active ? Math.min(duration, currentTime + 3) : Math.max(0, currentTime - 3);
+
+			playerRef.current.jumpTo(destTime);
+			setPlayingMediaInfo({
+				mediaProgress: destTime,
+			});
 		}, []),
 		changeMediaPlayStatus,
 	});
@@ -194,6 +198,7 @@ export const Player = () => {
 					onProgressChange={(progress) => {
 						playerRef.current.jumpTo(progress);
 						setPlayingMediaInfo({
+							mediaProgress: progress,
 							mediaPlayStatus: EMediaPlayStatus.PLAYING,
 						});
 					}}

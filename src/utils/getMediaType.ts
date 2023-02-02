@@ -13,6 +13,10 @@ export const getMediaType = (mediaPath: string) => {
 		case 'webm':
 		case 'mkv':
 		case 'mov':
+		case 'flv':
+		case 'm3u8':
+		case 'm3u':
+		case 'mpd':
 			return EMediaType.VIDEO;
 		case 'mp3':
 		case 'wav':
