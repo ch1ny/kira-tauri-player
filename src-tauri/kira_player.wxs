@@ -112,15 +112,52 @@
                 <RegistryKey Root="HKCU" Key="Software\\{{{manufacturer}}}\\{{{product_name}}}">
                     <RegistryValue Name="InstallDir" Type="string" Value="[INSTALLDIR]" KeyPath="yes" />
                 </RegistryKey>
+                <!-- 右键以 KiraPlayer 打开 -->
                 <RegistryKey Root="HKCR" Key="*\shell\Play with Kira Player">
-                    <!-- 右键以 KiraPlayer 打开 -->
                     <RegistryValue Type="string" Value="通过 Kira Player 播放" />
                     <RegistryValue Name="Icon" Type="string" Value="[INSTALLDIR]kira-player.exe" />
                 </RegistryKey>
                 <RegistryKey Root="HKCR" Key="*\shell\Play with Kira Player\command">
-                    <!-- 右键以 KiraPlayer 打开 - command -->
                     <RegistryValue Type="string" Value='[INSTALLDIR]kira-player.exe "%1"' />
                 </RegistryKey>
+                <!-- 关联视频文件类型 -->
+                <RegistryKey Root="HKCR" Key=".mp4">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".webm">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".mkv">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".mov">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".flv">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".m3u8">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".m3u">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key=".mpd">
+                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile">
+                    <RegistryValue Type="string" Value="Video File (Kira Player)" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\DefaultIcon">
+                    <RegistryValue Type="string" Value="[INSTALLDIR]kira-player.exe" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\shell\open">
+                    <RegistryValue Type="string" Value="通过 kira-player 播放视频" />
+                </RegistryKey>
+                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\shell\open\command">
+                    <RegistryValue Type="string" Value='[INSTALLDIR]kira-player.exe "%1"' />
+                </RegistryKey>
+                <!-- end: 关联视频文件类型 -->
             </Component>
             <Component Id="Path" Guid="{{{path_component_guid}}}" Win64="$(var.Win64)">
                 <File Id="Path" Source="{{{app_exe_source}}}" KeyPath="yes" Checksum="yes"/>
