@@ -121,40 +121,19 @@
                     <RegistryValue Type="string" Value='[INSTALLDIR]kira-player.exe "%1"' />
                 </RegistryKey>
                 <!-- 关联视频文件类型 -->
-                <RegistryKey Root="HKCR" Key=".mp4">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".webm">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".mkv">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".mov">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
                 <RegistryKey Root="HKCR" Key=".flv">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                    <RegistryValue Type="string" Value="KiraPlayer.flv" />
                 </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".m3u8">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
+                <RegistryKey Root="HKCR" Key="KiraPlayer.flv">
+                    <RegistryValue Type="string" Value="Flash Video File (FLV文件)" />
                 </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".m3u">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key=".mpd">
-                    <RegistryValue Type="string" Value="KiraPlayer.videoFile" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile">
-                    <RegistryValue Type="string" Value="Video File (Kira Player)" />
-                </RegistryKey>
-                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\DefaultIcon">
+                <RegistryKey Root="HKCR" Key="KiraPlayer.flv\DefaultIcon">
                     <RegistryValue Type="string" Value="[INSTALLDIR]kira-player.exe" />
                 </RegistryKey>
-                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\shell\open">
+                <RegistryKey Root="HKCR" Key="KiraPlayer.flv\shell\open">
                     <RegistryValue Type="string" Value="通过 kira-player 播放视频" />
                 </RegistryKey>
-                <RegistryKey Root="HKCR" Key="KiraPlayer.videoFile\shell\open\command">
+                <RegistryKey Root="HKCR" Key="KiraPlayer.flv\shell\open\command">
                     <RegistryValue Type="string" Value='[INSTALLDIR]kira-player.exe "%1"' />
                 </RegistryKey>
                 <!-- end: 关联视频文件类型 -->
