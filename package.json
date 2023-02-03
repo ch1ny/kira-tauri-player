@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"tauri": "tauri",
 		"iss": "./EasySetup/Compile.exe /cc ./setup/setup.iss",
-		"dist": "yarn tauri build&&yarn iss"
+		"dist": "tauri build&&yarn iss"
 	},
 	"dependencies": {
 		"@ant-design/icons": "^5.0.1",

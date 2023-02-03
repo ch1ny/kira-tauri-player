@@ -1,79 +1,107 @@
 .control {
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  align-items: center;
-  color: #f0f8ff;
-  background-color: #3d434d;
+	width: 100%;
+	height: 5rem;
+	display: flex;
+	align-items: center;
+	color: #f0f8ff;
+	background-color: #3d434d;
 
-  .mediaInfo {
-    width: 20%;
-    height: 100%;
-    position: relative;
-  }
+	.playControls {
+		width: 30%;
+		height: 100%;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-  .playProgress {
-    width: 40%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+		.playController {
+			margin-inline: 0.5em;
+		}
+	}
 
-    &Time {
-      margin-inline: 1em;
-    }
+	.playProgress {
+		width: 40%;
+		height: 100%;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-    &Bar {
-      width: 100%;
-    }
-  }
+		&Time {
+			margin-inline: 1em;
+		}
 
-  .playControls {
-    width: 40%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+		&Bar {
+			width: 100%;
+		}
+	}
 
-    .playController {
-      margin-inline: .5em;
-    }
-  }
+	.others {
+		width: 30%;
+		height: 100%;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-  :global {
-    .ant-slider {
-      &-handle{
-        &::before {
-          display: none;
-        }
-  
-        &::after {
-          display: none;
-        }
-      }
-  
-      &-rail {
-        background-color: rgba(255, 255, 255, .4);
-      }
-  
-      &-track {
-        background-color: #4096ff;
-        transition: all .2s ease;
-      }
+		.mediaVolume {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-      &:hover {
-  
-        .ant-slider-rail {
-          background-color: rgba(255, 255, 255, .5);
-        }
-    
-        .ant-slider-track {
-          background-color: #69b1ff;
-          transform: scaleY(1.5);
-        }
-      }
-    }
-  }
+		.playEndCallback {
+			margin: 0 0.2em;
+
+			&Button {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 1.5em;
+				height: 1.5em;
+				border-radius: 0.3em;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				box-shadow: 0 0 3px #f0f8ff;
+
+				&:hover {
+					filter: drop-shadow(0 0 2px #f0f8ff);
+				}
+			}
+		}
+	}
+
+	:global {
+		.ant-slider {
+			&-handle {
+				&::before {
+					display: none;
+				}
+
+				&::after {
+					display: none;
+				}
+			}
+
+			&-rail {
+				background-color: rgba(255, 255, 255, 0.4);
+			}
+
+			&-track {
+				background-color: #ff9c40;
+				transition: all 0.1s ease;
+			}
+
+			&:hover {
+				.ant-slider-rail {
+					background-color: rgba(255, 255, 255, 0.5);
+				}
+
+				.ant-slider-track {
+					background-color: #feb26b;
+					transform: scaleY(1.5);
+				}
+			}
+		}
+	}
 }

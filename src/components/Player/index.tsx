@@ -3,6 +3,7 @@ import { defaultMediaPlayerRef, getMediaType, TMediaPlayerRef } from '@/utils';
 import { getMatches } from '@tauri-apps/api/cli';
 import { open } from '@tauri-apps/api/dialog';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
+import { getCurrent } from '@tauri-apps/api/window';
 import { useSetState } from 'ahooks';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Control } from '../Control';
@@ -15,6 +16,10 @@ interface IPlayerPlacementProps {
 
 const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
 	const { onSelect } = props;
+
+	useEffect(() => {
+		getCurrent().setTitle('Kira Player');
+	}, []);
 
 	const selectMediaFile = useCallback(async () => {
 		const selected = await open({

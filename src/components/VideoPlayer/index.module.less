@@ -1,36 +1,112 @@
 .videoContent {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  cursor: pointer;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	cursor: pointer;
 
-  .fullscreenProgress {
-    width: 100%;
-    height: 6px;
-    position: absolute;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transform: scaleY(0.5) translateY(50%);
+	.fullscreenProgress {
+		width: 100%;
+		height: 6px;
+		position: absolute;
+		top: auto;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		transform: scaleY(0.5) translateY(50%);
 
-    &Track, &Bar {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0%;
-      top: 0%;
-      bottom: 0%;
-    }
+		&Track,
+		&Bar {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0%;
+			top: 0%;
+			bottom: 0%;
+		}
 
-    &Track {
-      background-color: rgba(255, 255, 255, .4);
-    }
+		&Track {
+			background-color: rgba(255, 255, 255, 0.4);
+		}
 
-    &Bar {
-      background-color: #277af6;
-      transform-origin: 0 0;
-      transition: transform 1s linear;
-    }
-  }
+		&Bar {
+			background-color: #ff9c40;
+			transform-origin: 0 0;
+			transition: transform 0.1s linear;
+		}
+	}
+
+	.loadingVideo {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0%;
+		top: 0%;
+		right: 0%;
+		bottom: 0%;
+		background-color: #282c34;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.loadingAnime {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 50%;
+			height: 30%;
+			position: relative;
+
+			& > i {
+				display: block;
+				float: left;
+				width: 3%;
+				height: 70%;
+				background: #e5e5e5;
+				margin: 0 0.5em;
+				transform: scaleY(0.4);
+				animation: loadingVideo 1.2s infinite;
+
+				&:nth-child(1) {
+					animation-delay: 0.1s;
+				}
+
+				&:nth-child(2) {
+					animation-delay: 0.2s;
+				}
+
+				&:nth-child(3) {
+					animation-delay: 0.3s;
+				}
+
+				&:nth-child(4) {
+					animation-delay: 0.4s;
+				}
+
+				&:nth-child(5) {
+					animation-delay: 0.5s;
+				}
+			}
+		}
+
+		.loadingText {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 2em;
+			color: #e5e5e5;
+		}
+	}
+}
+
+@keyframes loadingVideo {
+	0%,
+	40%,
+	100% {
+		transform: scaleY(0.4);
+	}
+
+	20% {
+		transform: scaleY(1);
+	}
 }

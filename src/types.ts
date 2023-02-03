@@ -19,3 +19,10 @@ export enum EMediaPlayStatus {
 	PAUSED,
 	PLAYING,
 }
+
+export enum EPlayEndCallback {
+	ListPlay = '列表播放', // 列表播放 <SwapRightOutlined />
+	ListLoop = '列表循环', // 列表循环 <RetweetOutlined />
+	SelfLoop = '单曲循环', // 单曲循环 <SyncOutlined />
+	// RandomList, // 随机播放
+}

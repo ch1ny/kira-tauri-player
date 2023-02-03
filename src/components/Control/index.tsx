@@ -3,11 +3,13 @@ import { preZero } from '@/utils';
 import {
 	CaretRightOutlined,
 	PauseOutlined,
+	RetweetOutlined,
 	SoundOutlined,
 	StepBackwardOutlined,
 	StepForwardOutlined,
 } from '@ant-design/icons';
 import { Button, Slider } from 'antd';
+import { useMemo } from 'react';
 import styles from './index.module.less';
 
 interface IControlProps {
@@ -37,26 +39,12 @@ export const Control: React.FC<IControlProps> = (props) => {
 		onPlayStatusChange,
 	} = props;
 
+	const playEndCallBackIcon = useMemo(() => {
+		return <RetweetOutlined />; // 循环播放
+	}, []);
+
 	return (
 		<div className={styles.control}>
-			{/* 媒体信息 */}
-			<div className={styles.mediaInfo}>
-				<div className={styles.mediaName}></div>
-			</div>
-			{/* 播放进度 */}
-			<div className={styles.playProgress}>
-				<div className={styles.playProgressTime}>{transSecondsToMinutes(progress)}</div>
-				<div className={styles.playProgressBar}>
-					<Slider
-						value={progress}
-						min={0}
-						max={mediaDuration}
-						tooltip={{ formatter: null }}
-						onChange={onProgressChange}
-					/>
-				</div>
-				<div className={styles.playProgressTime}>{transSecondsToMinutes(mediaDuration)}</div>
-			</div>
 			{/* 控制器 */}
 			<div className={styles.playControls}>
 				<div className={styles.playController}>
@@ -78,7 +66,28 @@ export const Control: React.FC<IControlProps> = (props) => {
 				<div className={styles.playController}>
 					<Button shape='circle' icon={<StepForwardOutlined />} />
 				</div>
-				<div className={styles.playController} style={{ width: '5em' }}>
+			</div>
+			{/* 播放进度 */}
+			<div className={styles.playProgress}>
+				<div className={styles.playProgressTime}>{transSecondsToMinutes(progress)}</div>
+				<div className={styles.playProgressBar}>
+					<Slider
+						value={progress}
+						min={0}
+						max={mediaDuration}
+						step={0.1}
+						tooltip={{ formatter: null }}
+						onChange={onProgressChange}
+					/>
+				</div>
+				<div className={styles.playProgressTime}>{transSecondsToMinutes(mediaDuration)}</div>
+			</div>
+			{/* 其他功能 */}
+			<div className={styles.others}>
+				<div className={styles.mediaVolume}>
+					<div>
+						<SoundOutlined />
+					</div>
 					<Slider
 						min={0}
 						max={100}
@@ -86,10 +95,13 @@ export const Control: React.FC<IControlProps> = (props) => {
 						value={volume}
 						tooltip={{ formatter: (value) => `${value}%` }}
 						onChange={onVolumeChange}
+						style={{ width: '5em' }}
 					/>
 				</div>
-				<div className={styles.playController}>
-					<Button size='small' icon={<SoundOutlined />} />
+				<div className={styles.playEndCallback}>
+					<div className={styles.playEndCallbackButton} title={'列表循环'}>
+						{playEndCallBackIcon}
+					</div>
 				</div>
 			</div>
 		</div>
