@@ -1,0 +1,2 @@
+# 后面考虑把 EasySetup 作为子模块加入进来，暂时先通过该方式修改 Github 语言统计
+*.isl linguist-language=TypeScript
