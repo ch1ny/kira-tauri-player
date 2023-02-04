@@ -3,14 +3,22 @@ import { preZero } from '@/utils';
 import {
 	CaretRightOutlined,
 	PauseOutlined,
-	RetweetOutlined,
 	SoundOutlined,
 	StepBackwardOutlined,
 	StepForwardOutlined,
+	SwapRightOutlined,
 } from '@ant-design/icons';
 import { Button, Slider } from 'antd';
 import { useMemo } from 'react';
 import styles from './index.module.less';
+
+const sliderBlur = () =>
+	new Promise<void>((resolve) => resolve()).then(() => {
+		const target = document.activeElement;
+		if (!target) return;
+
+		(target as any).blur();
+	});
 
 interface IControlProps {
 	volume: number;
@@ -40,7 +48,7 @@ export const Control: React.FC<IControlProps> = (props) => {
 	} = props;
 
 	const playEndCallBackIcon = useMemo(() => {
-		return <RetweetOutlined />; // 循环播放
+		return <SwapRightOutlined />; // 列表播放
 	}, []);
 
 	return (
@@ -78,6 +86,7 @@ export const Control: React.FC<IControlProps> = (props) => {
 						step={0.1}
 						tooltip={{ formatter: null }}
 						onChange={onProgressChange}
+						onAfterChange={sliderBlur}
 					/>
 				</div>
 				<div className={styles.playProgressTime}>{transSecondsToMinutes(mediaDuration)}</div>
@@ -94,12 +103,13 @@ export const Control: React.FC<IControlProps> = (props) => {
 						step={1}
 						value={volume}
 						tooltip={{ formatter: (value) => `${value}%` }}
-						onChange={onVolumeChange}
 						style={{ width: '5em' }}
+						onChange={onVolumeChange}
+						onAfterChange={sliderBlur}
 					/>
 				</div>
 				<div className={styles.playEndCallback}>
-					<div className={styles.playEndCallbackButton} title={'列表循环'}>
+					<div className={styles.playEndCallbackButton} title={'列表播放'}>
 						{playEndCallBackIcon}
 					</div>
 				</div>
