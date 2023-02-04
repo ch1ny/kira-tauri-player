@@ -4,7 +4,6 @@ import { EMediaPlayStatus } from '@/types';
 import { TMediaPlayerRef } from '@/utils';
 import { getCurrent } from '@tauri-apps/api/window';
 import React, {
-	lazy,
 	Suspense,
 	useCallback,
 	useEffect,
@@ -17,7 +16,7 @@ import type TReactPlayer from 'react-player';
 // import ReactPlayer from 'react-player';
 import styles from './index.module.less';
 
-const ReactPlayer: React.LazyExoticComponent<typeof TReactPlayer> = lazy(
+const ReactPlayer: React.LazyExoticComponent<typeof TReactPlayer> = React.lazy(
 	() => import('react-player')
 );
 

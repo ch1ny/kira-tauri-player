@@ -16,6 +16,9 @@
 		"@tauri-apps/api": "^1.2.0",
 		"ahooks": "^3.7.4",
 		"antd": "^5.1.7",
+		"classnames": "^2.3.2",
+		"mobx": "^6.7.0",
+		"mobx-react": "^7.6.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-player": "^2.11.0"

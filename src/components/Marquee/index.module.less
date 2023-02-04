@@ -1,0 +1,33 @@
+.marquee {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+
+	&Content {
+		position: relative;
+		white-space: nowrap;
+		width: max-content;
+	}
+
+	&:hover {
+		.marqueeContent {
+			animation-delay: 200ms;
+			animation-name: marqueeText;
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+			animation-play-state: running;
+		}
+	}
+}
+
+@keyframes marqueeText {
+	0% {
+		padding-left: 100%;
+		transform: translateX(0%);
+	}
+
+	100% {
+		padding-left: 100%;
+		transform: translateX(-100%);
+	}
+}

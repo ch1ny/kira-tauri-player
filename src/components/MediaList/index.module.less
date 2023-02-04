@@ -1,0 +1,152 @@
+.mediaList {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	align-items: center;
+	height: 100%;
+	transition: all 0.2s ease;
+
+	.openButton {
+		width: 1.25em;
+		height: 3em;
+		color: #feb26b;
+		background-color: rgba(#282c34, 0.7);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transform: perspective(1.5em) rotateY(-15deg);
+		transition: all 0.2s ease;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(#282c34, 0.8);
+		}
+
+		&:active {
+			background-color: rgba(#282c34, 0.6);
+		}
+
+		& > * {
+			transition: all 0.2s ease;
+			transform: rotateZ(90deg);
+		}
+	}
+
+	&Content {
+		width: 15em;
+		height: 100%;
+		background-color: rgba(#282c34, 0.8);
+		overflow: auto;
+		color: #f0f8ff;
+	}
+
+	&Closed {
+		transform: translateX(15em);
+
+		.openButton {
+			background-color: rgba(#282c34, 0.35);
+			color: #f0f8ff;
+
+			& > * {
+				transform: rotateZ(270deg);
+			}
+		}
+	}
+}
+
+.mediaItem {
+	position: relative;
+	width: 100%;
+	height: 2em;
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+	border-bottom: 1px solid rgba(#f0f8ff, 0.6);
+	transition: all 0.1s linear;
+	cursor: pointer;
+
+	&:hover {
+		color: #feb26b;
+		background-color: rgba(#282c34, 0.8);
+	}
+
+	&Status,
+	.removeMediaItem {
+		width: 2em;
+		height: 100%;
+		flex-shrink: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&Name {
+		position: relative;
+		width: 0;
+		height: 100%;
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+	}
+
+	.removeMediaItem {
+		transition: all 0.1s linear;
+
+		&:hover {
+			color: #f8290e;
+		}
+	}
+
+	&Playing {
+		color: #ff9c40;
+
+		&:hover {
+			color: #ff9c40;
+		}
+
+		&Icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			height: 100%;
+
+			& > i {
+				display: block;
+				float: left;
+				width: 2px;
+				height: 50%;
+				background: #ff9c40;
+				margin: 0 1px;
+				transform: scaleY(0.4);
+				animation: playingIcon 0.8s infinite;
+
+				&:nth-child(1) {
+					animation-delay: 0.1s;
+				}
+
+				&:nth-child(2) {
+					animation-delay: 0.2s;
+				}
+
+				&:nth-child(3) {
+					animation-delay: 0.3s;
+				}
+			}
+		}
+	}
+}
+
+@keyframes playingIcon {
+	0%,
+	40%,
+	100% {
+		transform: scaleY(0.4);
+	}
+
+	20% {
+		transform: scaleY(1);
+	}
+}

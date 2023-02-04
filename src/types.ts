@@ -26,3 +26,8 @@ export enum EPlayEndCallback {
 	SelfLoop = '单曲循环', // 单曲循环 <SyncOutlined />
 	// RandomList, // 随机播放
 }
+
+export type TPlaylistMediaItem = {
+	mediaPath: string;
+	mediaSrc: string; // convertSrc 后的路径
+};

@@ -1,17 +1,20 @@
-import { EMediaPlayStatus, EMediaType } from '@/types';
+import { useStores } from '@/hooks';
+import { EMediaPlayStatus, EMediaType, TPlaylistMediaItem } from '@/types';
 import { defaultMediaPlayerRef, getMediaType, TMediaPlayerRef } from '@/utils';
 import { getMatches } from '@tauri-apps/api/cli';
 import { open } from '@tauri-apps/api/dialog';
 import { convertFileSrc } from '@tauri-apps/api/tauri';
 import { getCurrent } from '@tauri-apps/api/window';
 import { useSetState } from 'ahooks';
+import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Control } from '../Control';
+import { MediaList } from '../MediaList';
 import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
 
 interface IPlayerPlacementProps {
-	onSelect: (mediaPath: string) => void;
+	onSelect: (mediaPath: TPlaylistMediaItem) => void;
 }
 
 const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
@@ -33,7 +36,10 @@ const PlayerPlacement: React.FC<IPlayerPlacementProps> = (props) => {
 		});
 		if (!selected) return;
 
-		onSelect(convertFileSrc(selected as string));
+		onSelect({
+			mediaPath: `${selected}`,
+			mediaSrc: convertFileSrc(`${selected}`),
+		});
 	}, [onSelect]);
 
 	return (
@@ -90,8 +96,16 @@ const useBindGesture = (callbacks: {
 	}, []);
 };
 
-export const Player = () => {
-	const [mediaPath, setMediaPath] = useState('');
+export const Player = observer(() => {
+	const {
+		playlist: { addMediaToPlaylist, playingMedia, setPlayingMedia },
+	} = useStores();
+
+	const { mediaPath, mediaSrc } = useMemo(
+		() => playingMedia?.value || { mediaPath: '', mediaSrc: '' },
+		[playingMedia]
+	);
+
 	// 初始化查看应用是否通过 args 传入播放的多媒体文件
 	useEffect(() => {
 		getMatches().then((matches) => {
@@ -102,7 +116,10 @@ export const Player = () => {
 			} = matches;
 			if (typeof mediaPath !== 'string') return;
 
-			setMediaPath(convertFileSrc(mediaPath));
+			addMediaToPlaylist({
+				mediaPath,
+				mediaSrc: convertFileSrc(mediaPath),
+			});
 		});
 	}, []);
 
@@ -151,6 +168,8 @@ export const Player = () => {
 		changeMediaPlayStatus,
 	});
 
+	const [showMediaList, setShowMediaList] = useState(false);
+
 	return (
 		<div className={styles.playerContent}>
 			<div className={styles.player}>
@@ -159,7 +178,7 @@ export const Player = () => {
 						case EMediaType.VIDEO:
 							return (
 								<VideoPlayer
-									mediaPath={mediaPath}
+									mediaPath={mediaSrc}
 									mediaVolume={playingMediaInfo.mediaVolume / 100}
 									mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
 									ref={playerRef}
@@ -187,9 +206,15 @@ export const Player = () => {
 								/>
 							);
 						default:
-							return <PlayerPlacement onSelect={setMediaPath} />;
+							return <PlayerPlacement onSelect={addMediaToPlaylist} />;
 					}
 				})()}
+				<MediaList
+					open={showMediaList}
+					onOpenButtonClick={() => {
+						setShowMediaList((showMediaList) => !showMediaList);
+					}}
+				/>
 			</div>
 			<div className={styles.controller}>
 				<Control
@@ -214,4 +239,4 @@ export const Player = () => {
 			</div>
 		</div>
 	);
-};
+});

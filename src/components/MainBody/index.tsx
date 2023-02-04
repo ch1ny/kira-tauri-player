@@ -1,3 +1,5 @@
+import stores from '@/stores';
+import { Provider } from 'mobx-react';
 import { Player } from '../Player';
 import styles from './index.module.less';
 
@@ -11,7 +13,9 @@ export const MainBody = () => {
 					position: 'relative',
 					display: 'flex',
 				}}>
-				<Player />
+				<Provider {...stores}>
+					<Player />
+				</Provider>
 			</div>
 		</div>
 	);
