@@ -1,4 +1,4 @@
-import { EMediaPlayStatus, EPlayEndCallback } from '@/types';
+import { EPlayEndCallback } from '@/types';
 import { getNextMediaNode } from '@/utils';
 import { useCallback } from 'react';
 import { useStores } from '../useStores';
@@ -13,17 +13,12 @@ export const usePlayEnded = () => {
 
 		switch (playEndCallback) {
 			case EPlayEndCallback.SelfLoop:
-				setTimeout(() => {
-					changeMediaPlayStatus(EMediaPlayStatus.PLAYING);
-				}, 0);
+				setPlayingMedia(playingMedia!);
 				return true;
 			case EPlayEndCallback.ListPlay:
 				return !!nextMedia && setPlayingMedia(nextMedia);
 			case EPlayEndCallback.ListLoop:
 				setPlayingMedia(nextMedia ? nextMedia : playlist.head!);
-				setTimeout(() => {
-					changeMediaPlayStatus(EMediaPlayStatus.PLAYING);
-				}, 0);
 				return true;
 		}
 	}, [playlist, playEndCallback, playingMedia]);

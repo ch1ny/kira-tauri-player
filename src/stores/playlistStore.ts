@@ -57,7 +57,9 @@ export default class PlaylistStore {
 	playingMedia: BiDirectionListNode<TPlaylistMediaItem> | null = null;
 	setPlayingMedia(mediaNode: BiDirectionListNode<TPlaylistMediaItem>) {
 		this.playingMedia = mediaNode;
-		this.mediaPlayStatus = EMediaPlayStatus.PLAYING;
+		setTimeout(() => {
+			this.mediaPlayStatus = EMediaPlayStatus.PLAYING;
+		}, 0);
 	}
 
 	playEndCallback: EPlayEndCallback = getInitPlayEndCallback();
