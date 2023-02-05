@@ -1,7 +1,10 @@
 import { useStores } from '@/hooks';
-import { CaretUpOutlined } from '@ant-design/icons';
+import { CaretUpOutlined, FileAddOutlined } from '@ant-design/icons';
+import { open as tauriDialogOpen } from '@tauri-apps/api/dialog';
+import { convertFileSrc } from '@tauri-apps/api/tauri';
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
+import { useCallback } from 'react';
 import styles from './index.module.less';
 import { MediaItem } from './MediaItem';
 
@@ -14,8 +17,26 @@ export const MediaList: React.FC<IMediaListProps> = observer((props) => {
 	const { open, onOpenButtonClick } = props;
 
 	const {
-		playlist: { playlist },
+		playlist: { playlist, addMediaToPlaylist },
 	} = useStores();
+
+	const addFile = useCallback(async () => {
+		const selected = await tauriDialogOpen({
+			multiple: false,
+			filters: [
+				{
+					name: 'Video',
+					extensions: ['mp4', 'webm', 'mkv', 'mov', 'flv', 'm3u'],
+				},
+			],
+		});
+		if (!selected) return;
+
+		addMediaToPlaylist({
+			mediaPath: `${selected}`,
+			mediaSrc: convertFileSrc(`${selected}`),
+		});
+	}, []);
 
 	return (
 		<div
@@ -27,9 +48,17 @@ export const MediaList: React.FC<IMediaListProps> = observer((props) => {
 				<CaretUpOutlined />
 			</div>
 			<div className={styles.mediaListContent}>
-				{playlist.map(({ mediaSrc }, _index, mediaNode) => (
-					<MediaItem mediaNode={mediaNode} key={mediaSrc} />
-				))}
+				<div className={styles.mediaListTitle}>
+					<div>播放列表</div>
+					<div className={styles.addFile} onClick={addFile}>
+						<FileAddOutlined />
+					</div>
+				</div>
+				<div className={styles.mediaListItems}>
+					{playlist.map(({ mediaSrc }, _index, mediaNode) => (
+						<MediaItem mediaNode={mediaNode} key={mediaSrc} />
+					))}
+				</div>
 			</div>
 		</div>
 	);

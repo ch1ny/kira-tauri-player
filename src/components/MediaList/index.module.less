@@ -38,8 +38,44 @@
 		width: 15em;
 		height: 100%;
 		background-color: rgba(#282c34, 0.8);
-		overflow: auto;
+		overflow: hidden;
 		color: #f0f8ff;
+		display: flex;
+		flex-direction: column;
+
+		.mediaListTitle {
+			width: 100%;
+			height: 2em;
+			background-color: #282c34;
+			display: flex;
+			align-items: center;
+
+			.addFile {
+				width: 2em;
+				height: 2em;
+				margin: 0 0 0 auto;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+				transition: all 0.2s ease;
+
+				&:hover {
+					transform: scale(1.1);
+					filter: drop-shadow(0 0 1px #f0f8ff);
+				}
+
+				&:active {
+					transform: scale(1);
+				}
+			}
+		}
+
+		.mediaListItems {
+			width: 100%;
+			max-height: 100%;
+			overflow: overlay;
+		}
 	}
 
 	&Closed {
@@ -95,7 +131,8 @@
 		transition: all 0.1s linear;
 
 		&:hover {
-			color: #f8290e;
+			transform: scale(1.15);
+			filter: drop-shadow(0 0 1px #ff6040);
 		}
 	}
 

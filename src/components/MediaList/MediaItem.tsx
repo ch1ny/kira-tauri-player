@@ -24,7 +24,7 @@ export const MediaItem: React.FC<IMediaItemProps> = (props) => {
 	const { mediaNode } = props;
 
 	const {
-		playlist: { playingMedia },
+		playlist: { playingMedia, setPlayingMedia },
 	} = useStores();
 	const isPlaying = useMemo(() => {
 		return mediaNode.value.mediaSrc === playingMedia?.value.mediaSrc;
@@ -41,7 +41,10 @@ export const MediaItem: React.FC<IMediaItemProps> = (props) => {
 			className={classNames({
 				[styles.mediaItem]: true,
 				[styles.mediaItemPlaying]: isPlaying,
-			})}>
+			})}
+			onClick={() => {
+				setPlayingMedia(mediaNode);
+			}}>
 			<div className={styles.mediaItemStatus}>
 				{isPlaying ? <PlayingIcon /> : <PlayCircleOutlined />}
 			</div>

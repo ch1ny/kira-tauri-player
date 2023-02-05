@@ -1,12 +1,15 @@
-import { EMediaPlayStatus } from '@/types';
+import { useStores } from '@/hooks';
+import { EMediaPlayStatus, EPlayEndCallback } from '@/types';
 import { preZero } from '@/utils';
 import {
 	CaretRightOutlined,
 	PauseOutlined,
+	RetweetOutlined,
 	SoundOutlined,
 	StepBackwardOutlined,
 	StepForwardOutlined,
 	SwapRightOutlined,
+	SyncOutlined,
 } from '@ant-design/icons';
 import { Button, Slider } from 'antd';
 import { useMemo } from 'react';
@@ -47,9 +50,20 @@ export const Control: React.FC<IControlProps> = (props) => {
 		onPlayStatusChange,
 	} = props;
 
+	const {
+		playlist: { playEndCallback, exchangePlayEndCallback },
+	} = useStores();
+
 	const playEndCallBackIcon = useMemo(() => {
-		return <SwapRightOutlined />; // 列表播放
-	}, []);
+		switch (playEndCallback) {
+			case EPlayEndCallback.ListPlay:
+				return <SwapRightOutlined />;
+			case EPlayEndCallback.ListLoop:
+				return <RetweetOutlined />;
+			case EPlayEndCallback.SelfLoop:
+				return <SyncOutlined />;
+		}
+	}, [playEndCallback]);
 
 	return (
 		<div className={styles.control}>
@@ -108,8 +122,8 @@ export const Control: React.FC<IControlProps> = (props) => {
 						onAfterChange={sliderBlur}
 					/>
 				</div>
-				<div className={styles.playEndCallback}>
-					<div className={styles.playEndCallbackButton} title={'列表播放'}>
+				<div className={styles.playEndCallback} title={playEndCallback}>
+					<div className={styles.playEndCallbackButton} onClick={exchangePlayEndCallback}>
 						{playEndCallBackIcon}
 					</div>
 				</div>

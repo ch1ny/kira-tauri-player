@@ -1,4 +1,4 @@
-import { useStores } from '@/hooks';
+import { usePlayEnded, useStores } from '@/hooks';
 import { EMediaPlayStatus, EMediaType, TPlaylistMediaItem } from '@/types';
 import { defaultMediaPlayerRef, getMediaType, TMediaPlayerRef } from '@/utils';
 import { getMatches } from '@tauri-apps/api/cli';
@@ -57,7 +57,6 @@ interface IPlayingMediaInfo {
 	mediaVolume: number;
 	mediaDuration: number;
 	mediaProgress: number;
-	mediaPlayStatus: EMediaPlayStatus;
 }
 
 const DefaultVoice = Number(localStorage.getItem('voice') || '30');
@@ -98,7 +97,7 @@ const useBindGesture = (callbacks: {
 
 export const Player = observer(() => {
 	const {
-		playlist: { addMediaToPlaylist, playingMedia, setPlayingMedia },
+		playlist: { addMediaToPlaylist, playingMedia, mediaPlayStatus, changeMediaPlayStatus },
 	} = useStores();
 
 	const { mediaPath, mediaSrc } = useMemo(
@@ -131,22 +130,10 @@ export const Player = observer(() => {
 		mediaVolume: DefaultVoice,
 		mediaDuration: 0,
 		mediaProgress: 0,
-		mediaPlayStatus: EMediaPlayStatus.PAUSED,
 	});
 	useEffect(() => {
 		localStorage.setItem('voice', `${playingMediaInfo.mediaVolume}`);
 	}, [playingMediaInfo.mediaVolume]);
-	const changeMediaPlayStatus = useCallback(() => {
-		setPlayingMediaInfo(({ mediaPlayStatus }) => ({
-			mediaPlayStatus: 1 - mediaPlayStatus,
-		}));
-	}, []);
-
-	useEffect(() => {
-		setPlayingMediaInfo({
-			mediaPlayStatus: !mediaPath ? EMediaPlayStatus.PAUSED : EMediaPlayStatus.PLAYING,
-		});
-	}, [mediaPath]);
 
 	useBindGesture({
 		adjustVolume: useCallback((active: boolean) => {
@@ -168,6 +155,8 @@ export const Player = observer(() => {
 		changeMediaPlayStatus,
 	});
 
+	const onPlayEnded = usePlayEnded();
+
 	const [showMediaList, setShowMediaList] = useState(false);
 
 	return (
@@ -180,7 +169,7 @@ export const Player = observer(() => {
 								<VideoPlayer
 									mediaPath={mediaSrc}
 									mediaVolume={playingMediaInfo.mediaVolume / 100}
-									mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
+									mediaPlayStatus={mediaPlayStatus}
 									ref={playerRef}
 									onVolumeChange={(volume) => {
 										setPlayingMediaInfo({
@@ -198,9 +187,8 @@ export const Player = observer(() => {
 										});
 									}}
 									onPlayEnded={() => {
-										setPlayingMediaInfo({
-											mediaPlayStatus: EMediaPlayStatus.PAUSED,
-										});
+										changeMediaPlayStatus(EMediaPlayStatus.PAUSED);
+										onPlayEnded();
 									}}
 									onPlayStatusChange={changeMediaPlayStatus}
 								/>
@@ -229,11 +217,11 @@ export const Player = observer(() => {
 						playerRef.current.jumpTo(progress);
 						setPlayingMediaInfo({
 							mediaProgress: progress,
-							mediaPlayStatus: EMediaPlayStatus.PLAYING,
 						});
+						changeMediaPlayStatus(EMediaPlayStatus.PLAYING);
 					}}
 					mediaDuration={playingMediaInfo.mediaDuration}
-					mediaPlayStatus={playingMediaInfo.mediaPlayStatus}
+					mediaPlayStatus={mediaPlayStatus}
 					onPlayStatusChange={changeMediaPlayStatus}
 				/>
 			</div>

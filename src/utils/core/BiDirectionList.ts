@@ -1,8 +1,9 @@
-export type BiDirectionListNode<T> = {
-	value: T;
-	next: BiDirectionListNode<T> | null;
-	prev: BiDirectionListNode<T> | null;
-};
+export class BiDirectionListNode<T> {
+	next: BiDirectionListNode<T> | null = null;
+	prev: BiDirectionListNode<T> | null = null;
+
+	constructor(public value: T) {}
+}
 
 type TBiDirectionListMapCallback<T, S> = (
 	value: T,
@@ -28,11 +29,7 @@ function findTail<T>(node: BiDirectionListNode<T>) {
 
 export class BiDirectionList<T> {
 	static createNode<T>(value: T): BiDirectionListNode<T> {
-		return {
-			value,
-			next: null,
-			prev: null,
-		};
+		return new BiDirectionListNode<T>(value);
 	}
 
 	head: BiDirectionListNode<T> | null = null;
