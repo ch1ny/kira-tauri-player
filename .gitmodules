@@ -1,0 +1,3 @@
+[submodule "setup/Compiler"]
+	path = setup/Compiler
+	url = git@github.com:ch1ny/EasyInnoSetup.git
