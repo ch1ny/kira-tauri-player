@@ -37,7 +37,7 @@ export class LinkedList<T> {
 		const results = [] as S[];
 		let node = this.head;
 		let index = 0;
-		while (!!node && index < 10) {
+		while (!!node) {
 			const result = cb(node.value, index++);
 			results.push(result);
 			node = node.next;
